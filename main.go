@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 
 	_ "github.com/lib/pq"
 )
@@ -15,15 +16,35 @@ type Book struct {
 	price  float32
 }
 
-func main() {
-	db, err := sql.Open("postgres", "postgres://myuser:mypass@localhost/bookstore")
+var db *sql.DB
+
+func init() {
+	var err error
+	db, err = sql.Open("postgres", "postgres://user:pass@localhost/bookstore")
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	if err = db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func main() {
+	http.HandleFunc("/books", booksIndex)
+	http.ListenAndServe(":3000", nil)
+}
+
+func booksIndex(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), 405)
+		return
+	}
+
 	rows, err := db.Query("SELECT * FROM books")
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, http.StatusText(500), 500)
+		return
 	}
 	defer rows.Close()
 
@@ -32,15 +53,17 @@ func main() {
 		bk := new(Book)
 		err := rows.Scan(&bk.isbn, &bk.title, &bk.author, &bk.price)
 		if err != nil {
-			log.Fatal(err)
+			http.Error(w, http.StatusText(500), 500)
+			return
 		}
 		bks = append(bks, bk)
 	}
 	if err = rows.Err(); err != nil {
-		log.Fatal(err)
+		http.Error(w, http.StatusText(500), 500)
+		return
 	}
 
 	for _, bk := range bks {
-		fmt.Printf("%s, %s, %s, £%.2f\n", bk.isbn, bk.title, bk.author, bk.price)
+		fmt.Fprintf(w, "%s, %s, %s, £%.2f\n", bk.isbn, bk.title, bk.author, bk.price)
 	}
 }
