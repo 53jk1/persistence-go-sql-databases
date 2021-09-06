@@ -48,3 +48,11 @@ ALTER USER myuser WITH SUPERUSER;
 ```
 go run main.go
 ```
+
+## Example Requests
+```
+$ curl -i localhost:3000/books
+```
+```
+$ curl -i "localhost:3000/books/show?isbn=978-1505255607"
+```
