@@ -16,6 +16,10 @@ type Book struct {
 	price  float32
 }
 
+const (
+	statusMethodNotAllowed = 405
+)
+
 var db *sql.DB
 
 func init() {
@@ -37,7 +41,7 @@ func main() {
 
 func booksIndex(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		http.Error(w, http.StatusText(405), 405)
+		http.Error(w, http.StatusText(statusMethodNotAllowed), statusMethodNotAllowed)
 		return
 	}
 
