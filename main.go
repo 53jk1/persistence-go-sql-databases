@@ -77,7 +77,7 @@ func booksIndex(w http.ResponseWriter, r *http.Request) {
 
 func booksShow(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		http.Error(w, http.StatusText(405), 405)
+		http.Error(w, http.StatusText(statusMethodNotAllowed), statusMethodNotAllowed)
 		return
 	}
 
@@ -104,7 +104,7 @@ func booksShow(w http.ResponseWriter, r *http.Request) {
 
 func booksCreate(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		http.Error(w, http.StatusText(405), 405)
+		http.Error(w, http.StatusText(statusMethodNotAllowed), statusMethodNotAllowed)
 		return
 	}
 
