@@ -24,7 +24,7 @@ var db *sql.DB
 
 func init() {
 	var err error
-	db, err = sql.Open("postgres", "postgres://user:pass@localhost/bookstore")
+	db, err = sql.Open("postgres", "postgres://myuser:mypass@localhost/bookstore")
 	if err != nil {
 		log.Fatal(err)
 	}
