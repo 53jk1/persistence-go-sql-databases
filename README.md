@@ -45,6 +45,7 @@ Grant privileges to `myuser`:
 ALTER USER myuser WITH SUPERUSER;
 ```
 
+Run whole web app.
 ```
 go run main.go
 ```
