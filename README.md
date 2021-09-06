@@ -1,14 +1,23 @@
 ## 🚀 Deployment <a name = "deployment"></a>
 
+Get Postgres
+```
+sudo apt install postgresql postgresql-contribp
+```
+Start Postgres
+```
+sudo service postgresql start
+```
+Connect to postgres service and open the psql shell
+```
+sudo -u postgres psql
+```
 Initialize Database by creating a new database called `bookstore`
-```
-mysql
-```
 ```
 CREATE DATABASE bookstore;
 ```
 ```
-USE bookstore
+\c bookstore
 ```
 ```
 CREATE TABLE books (
@@ -24,4 +33,18 @@ INSERT INTO books (isbn, title, author, price) VALUES
 ('978-1503379640', 'The Prince', 'Niccolò Machiavelli', 6.99);
 
 ALTER TABLE books ADD PRIMARY KEY (isbn);
+```
+
+Create User:
+```
+create user myuser with encrypted password 'mypass';
+```
+
+Grant privileges to `myuser`:
+```
+ALTER USER myuser WITH SUPERUSER;
+```
+
+```
+go run main.go
 ```
